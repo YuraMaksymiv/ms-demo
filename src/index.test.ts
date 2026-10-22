@@ -385,3 +385,41 @@ describe('ms(invalid inputs)', () => {
     }).toThrow();
   });
 });
+
+// leading plus sign
+
+describe('ms(leading +)', () => {
+  it('AC-10: should return the same number as parse()', () => {
+    expect(ms('+1h')).toBe(3600000);
+    expect(ms('+1.5h')).toBe(5400000);
+    expect(ms('+.5h')).toBe(1800000);
+    expect(ms('+100')).toBe(100);
+    expect(ms('+1 hours')).toBe(3600000);
+  });
+
+  it('AC-11: should return NaN for invalid signs', () => {
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('+-1h'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('-+1h'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('++1h'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('--1h'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('+'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('+ 1h'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('10+.5'))).toBe(true);
+    // @ts-expect-error - We expect this to fail.
+    expect(Number.isNaN(ms('1h+'))).toBe(true);
+  });
+
+  it('AC-13: should never output a leading "+" for numbers', () => {
+    for (const value of [1000, 0, -1000, 234234234, -234234234]) {
+      expect(ms(value).startsWith('+')).toBe(false);
+      expect(ms(value, { long: true }).startsWith('+')).toBe(false);
+    }
+  });
+});

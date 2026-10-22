@@ -259,3 +259,14 @@ describe('format(invalid inputs)', () => {
     }).toThrow();
   });
 });
+
+// leading plus sign
+
+describe('format(no leading +)', () => {
+  it('AC-13: should never output a leading "+"', () => {
+    for (const value of [500, 1000, 0, -500, -1000, 234234234, -234234234]) {
+      expect(format(value).startsWith('+')).toBe(false);
+      expect(format(value, { long: true }).startsWith('+')).toBe(false);
+    }
+  });
+});
