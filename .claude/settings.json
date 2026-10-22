@@ -1,0 +1,26 @@
+{
+  "enabledPlugins": {
+    "sdd-engineering@dev-digest-ai-marketplace": true,
+    "engineering-paved-path@dev-digest-ai-marketplace": true,
+    "research-tools@dev-digest-ai-marketplace": true,
+    "architecture-review@dev-digest-ai-marketplace": true,
+    "sdd-engineering@dev-digest-ai-marketplace-stable": false,
+    "engineering-paved-path@dev-digest-ai-marketplace-stable": false,
+    "research-tools@dev-digest-ai-marketplace-stable": false,
+    "architecture-review@dev-digest-ai-marketplace-stable": false
+  },
+  "extraKnownMarketplaces": {
+    "dev-digest-ai-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "YuraMaksymiv/dev-digest-ai-marketplace"
+      }
+    },
+    "dev-digest-ai-marketplace-stable": {
+      "source": {
+        "source": "url",
+        "url": "https://raw.githubusercontent.com/YuraMaksymiv/dev-digest-ai-marketplace/main/channels/stable/marketplace.json"
+      }
+    }
+  }
+}
