@@ -206,3 +206,102 @@ describe('parse(invalid inputs)', () => {
     }).toThrow();
   });
 });
+
+// leading plus sign
+
+describe('parse(leading +)', () => {
+  const units = [
+    'milliseconds',
+    'millisecond',
+    'msecs',
+    'msec',
+    'ms',
+    'seconds',
+    'second',
+    'secs',
+    'sec',
+    's',
+    'minutes',
+    'minute',
+    'mins',
+    'min',
+    'm',
+    'hours',
+    'hour',
+    'hrs',
+    'hr',
+    'h',
+    'days',
+    'day',
+    'd',
+    'weeks',
+    'week',
+    'w',
+    'months',
+    'month',
+    'mo',
+    'years',
+    'year',
+    'yrs',
+    'yr',
+    'y',
+  ];
+
+  it('AC-1: should match the unsigned result for every unit and alias', () => {
+    for (const unit of units) {
+      expect(parse(`+2${unit}`)).toBe(parse(`2${unit}`));
+      expect(parse(`+2 ${unit}`)).toBe(parse(`2 ${unit}`));
+      expect(parse(`+2${unit.toUpperCase()}`)).toBe(parse(`2${unit}`));
+    }
+    expect(parse('+1h')).toBe(3600000);
+    expect(parse('+1 Hours')).toBe(3600000);
+  });
+
+  it('AC-2: should work with decimals', () => {
+    expect(parse('+1.5h')).toBe(5400000);
+    expect(parse('+1.5h')).toBe(parse('1.5h'));
+  });
+
+  it('AC-3: should work with no unit', () => {
+    expect(parse('+100')).toBe(100);
+  });
+
+  it('AC-4: should work with numbers starting with "."', () => {
+    expect(parse('+.5h')).toBe(1800000);
+    expect(parse('+.5h')).toBe(parse('.5h'));
+  });
+
+  it('AC-5: should return NaN with two or more signs', () => {
+    expect(Number.isNaN(parse('+-1h'))).toBe(true);
+    expect(Number.isNaN(parse('-+1h'))).toBe(true);
+    expect(Number.isNaN(parse('++1h'))).toBe(true);
+    expect(Number.isNaN(parse('--1h'))).toBe(true);
+  });
+
+  it('AC-6: should return NaN for a lone "+"', () => {
+    expect(Number.isNaN(parse('+'))).toBe(true);
+  });
+
+  it('AC-7: should return NaN when whitespace separates the sign and number', () => {
+    expect(Number.isNaN(parse('+ 1h'))).toBe(true);
+  });
+
+  it('AC-8: should return NaN when "+" is not the leading character', () => {
+    expect(Number.isNaN(parse('10+.5'))).toBe(true);
+    expect(Number.isNaN(parse('1h+'))).toBe(true);
+  });
+
+  it('AC-9: should count the leading "+" toward the length limit', () => {
+    expect(parse(`+${'0'.repeat(97)}ms`)).toBe(0);
+    expect(() => {
+      parse(`+${'0'.repeat(98)}ms`);
+    }).toThrow();
+  });
+
+  it('AC-14: should keep results for input without a leading "+"', () => {
+    expect(parse('100')).toBe(100);
+    expect(parse('-1.5h')).toBe(-5400000);
+    expect(parse('-.5h')).toBe(-1800000);
+    expect(Number.isNaN(parse('10-.5'))).toBe(true);
+  });
+});

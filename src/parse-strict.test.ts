@@ -219,3 +219,34 @@ describe('parseStrict(invalid inputs)', () => {
     }).toThrow();
   });
 });
+
+// leading plus sign
+
+describe('parseStrict(leading +)', () => {
+  it('AC-12: should return the same number as parse()', () => {
+    expect(parseStrict('+1h')).toBe(3600000);
+    expect(parseStrict('+1.5h')).toBe(5400000);
+    expect(parseStrict('+.5h')).toBe(1800000);
+    expect(parseStrict('+100')).toBe(100);
+    expect(parseStrict('+1 hours')).toBe(3600000);
+  });
+
+  it('AC-11: should return NaN for invalid signs', () => {
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('+-1h'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('-+1h'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('++1h'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('--1h'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('+'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('+ 1h'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('10+.5'))).toBe(true);
+    // @ts-expect-error - we expect the types to fail but JS users can still use this
+    expect(Number.isNaN(parseStrict('1h+'))).toBe(true);
+  });
+});
